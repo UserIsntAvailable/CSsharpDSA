@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AutoGUI
+namespace CSharpDSA.DataStructures
 {
     public interface IGraph<T> : ICollection<T>
     {
