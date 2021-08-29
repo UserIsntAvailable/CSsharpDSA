@@ -1,46 +1,68 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CSharpDSA.DataStructures
 {
     public class Graph<T> : IGraph<T>
     {
-        private Dictionary<T, List<T>> _items;
+        private readonly Dictionary<T, List<T>> _items;
 
         public Graph()
         {
             _items = new Dictionary<T, List<T>>();
         }
-        
-        #region NotImplementated
-        public IEnumerator<T> GetEnumerator() => throw new NotImplementedException();
 
-        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+        public int Count => _items.Count;
+
+        public bool IsReadOnly => false;
 
         public void Add(T item)
         {
-            throw new NotImplementedException();
+            if(item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            _items[item] = new List<T>();
         }
 
-        public void Clear()
+        public void Clear() => _items.Clear();
+
+        public bool Contains(T item)
         {
-            throw new NotImplementedException();
+            if(item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            return _items.ContainsKey(item);
         }
+        
+        public void CopyTo(T[] array, int arrayIndex) => Array.Copy(
+            _items.Keys.ToArray(),
+            0,
+            array,
+            arrayIndex,
+            this.Count
+        );
 
-        public bool Contains(T item) => throw new NotImplementedException();
-
-        public void CopyTo(T[] array, int arrayIndex)
+        public bool Remove(T item)
         {
-            throw new NotImplementedException();
+            if(item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            return _items.Remove(item);
         }
 
-        public bool Remove(T item) => throw new NotImplementedException();
+        public IEnumerator<T> GetEnumerator() => _items.Keys.GetEnumerator();
 
-        public int Count { get; }
+        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
-        public bool IsReadOnly { get; }
-
+        #region NotImplemented
         public void Add(T item, T value)
         {
             throw new NotImplementedException();
