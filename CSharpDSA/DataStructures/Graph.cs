@@ -15,6 +15,8 @@ namespace CSharpDSA.DataStructures
             _items = new Dictionary<T, IList<T>>();
         }
 
+        public IList<T> this[T item] => _items[item];
+
         public void Add(T item, T value)
         {
             if(item == null)
