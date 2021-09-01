@@ -23,6 +23,8 @@ namespace CSharpDSA.Algorithms
         /// </returns>
         public int BinarySearch<T>(IList<T> items, T value) where T : IComparable<T>
         {
+            if(items.Count == 0) return 0;
+            
             var lIndex = 0;
             var rIndex = items.Count - 1;
 
