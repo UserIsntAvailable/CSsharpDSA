@@ -8,11 +8,11 @@ namespace CSharpDSA.DataStructures
 {
     public class Graph<T> : IGraph<T> where T : IComparable<T>
     {
-        private readonly Dictionary<T, List<T>> _items;
+        private readonly Dictionary<T, IList<T>> _items;
 
         public Graph()
         {
-            _items = new Dictionary<T, List<T>>();
+            _items = new Dictionary<T, IList<T>>();
         }
 
         public void Add(T item, T value)
@@ -48,7 +48,40 @@ namespace CSharpDSA.DataStructures
 
         public void Traverse(T from, T to, Action<T> action)
         {
-            throw new NotImplementedException();
+            if(from == null)
+            {
+                throw new ArgumentNullException(nameof(from));
+            }
+
+            if(to == null)
+            {
+                throw new ArgumentNullException(nameof(to));
+            }
+
+            if(action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            if(!_items.ContainsKey(from))
+            {
+                throw new ArgumentNullException(nameof(from));
+            }
+
+            if(!_items.ContainsKey(to))
+            {
+                throw new ArgumentNullException(nameof(to));
+            }
+
+            if(from.CompareTo(to) == 0 || _items[from].Count == 0 || _items[to].Count == 0)
+            {
+                return;
+            }
+
+            foreach(var node in SearchAlgorithms.Instance.BreadthFirstSearch(_items, from, to))
+            {
+                action(node);
+            }
         }
 
         public int Count => _items.Count;
