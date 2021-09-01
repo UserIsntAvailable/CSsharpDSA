@@ -97,6 +97,11 @@ namespace CSharpDSA.DataStructures
                 throw new ArgumentNullException(nameof(item));
             }
 
+            if(_items.ContainsKey(item))
+            {
+                throw new ArgumentException("A graph can't not have a duplicate value", nameof(item));
+            }
+
             _items[item] = new List<T>();
         }
 
