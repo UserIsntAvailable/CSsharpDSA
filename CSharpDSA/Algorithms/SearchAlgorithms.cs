@@ -73,16 +73,17 @@ namespace CSharpDSA.Algorithms
 
                 foreach(var edge in edges)
                 {
-                    if(edge.CompareTo(end) == 0) goto END_NODE_FOUND;
-
                     if(trackedNodes.Contains(edge)) continue;
 
                     trackedNodes.Add(edge);
                     trace.Add(edge, current);
-                    i++;
+
+                    if(edge.CompareTo(end) == 0) goto END_NODE_FOUND;
                 }
+
+                i++;
             }
-            while(i != trackedNodes.Count - 1);
+            while(i <= trackedNodes.Count - 1);
 
             // If node 'end' wasn't connected to 'start'
             return Array.Empty<T>();
@@ -92,9 +93,11 @@ namespace CSharpDSA.Algorithms
 
             var parent = end;
 
-            while(parent.CompareTo(default(T)) != 0)
+            while(true)
             {
                 parent = trace[parent];
+
+                if(parent.CompareTo(start) == 0) break;
                 path.Add(parent);
             }
 

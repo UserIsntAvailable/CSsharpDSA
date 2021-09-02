@@ -84,6 +84,69 @@ namespace CSharpDSA.Unit.Tests.DataStructures
                       ex.ParamName == "value"
             );
         }
+
+        [Fact]
+        public void Traverse_ShouldWork_WhenFromAndToAreConnected()
+        {
+            var random = new Random();
+
+            var startNode = _fixture.Create<int>();
+            var endNode = _fixture.Create<int>();
+            var randomNodesCount = random.Next(15, 100);
+            var randomNodes = _fixture.CreateMany<int>(randomNodesCount).ToArray();
+
+            Graph<int> graph = new()
+            {
+                startNode, endNode,
+            };
+
+            foreach(var node in randomNodes)
+            {
+                graph.Add(node);
+            }
+
+            var actualNodesTraversed = ConnectNodes() + 1;
+
+            var expectedNodesTraversed = 0;
+            graph.Traverse(
+                startNode,
+                endNode,
+                (_) =>
+                {
+                    expectedNodesTraversed++;
+                }
+            );
+
+            expectedNodesTraversed.Should().Be(actualNodesTraversed);
+
+            int ConnectNodes()
+            {
+                var pathLength = randomNodes.Length / 3;
+
+                var startToEndPath = randomNodes[^pathLength..];
+
+                var current = startNode;
+
+                foreach(var node in startToEndPath)
+                {
+                    graph.Add(current, node);
+                    current = node;
+                }
+
+                graph.Add(current, endNode);
+
+                var randomAddedNodes = randomNodes[..^pathLength];
+
+                foreach(var node in randomAddedNodes)
+                {
+                    var randomNodeValue = randomNodes[random.Next(randomNodesCount)];
+
+                    graph.Add(randomNodeValue, node);
+                }
+
+                return pathLength;
+            }
+        }
     }
 
     public class Dummy : IComparable<Dummy>
