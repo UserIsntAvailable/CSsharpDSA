@@ -49,6 +49,13 @@ namespace CSharpDSA.DataStructures
             {
                 nodeList.Insert(~index, value);
             }
+            else
+            {
+                throw new ArgumentException(
+                    "A node can't have multiple connections to another same node",
+                    nameof(value)
+                );
+            }
         }
 
         public void Traverse(T from, T to, Action<T> action)

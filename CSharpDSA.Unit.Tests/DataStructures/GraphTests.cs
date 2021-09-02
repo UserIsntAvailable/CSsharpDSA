@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoFixture;
 using CSharpDSA.DataStructures;
 using FluentAssertions;
@@ -21,7 +22,7 @@ namespace CSharpDSA.Unit.Tests.DataStructures
             {
                 itemInGraph,
                 valueInGraph,
-                3,
+                _fixture.Create<int>(),
             };
 
             graph.Add(itemInGraph, valueInGraph);
@@ -66,6 +67,22 @@ namespace CSharpDSA.Unit.Tests.DataStructures
             Action action = () => graph.Add(dummyNode, _fixture.Create<int>());
 
             action.Should().ThrowExactly<KeyNotFoundException>();
+        }
+
+        [Fact]
+        public void Add_ShouldThrowArgumentException_WhenValueIsAlreadyConnectedToItem()
+        {
+            var dummyItem = _fixture.Create<int>();
+            var valueToCheck = _fixture.Create<int>();
+
+            Graph<int> graph = new() {valueToCheck, {dummyItem, valueToCheck}};
+
+            Action action = () => graph.Add(dummyItem, valueToCheck);
+
+            action.Should().ThrowExactly<ArgumentException>().Where(
+                ex => ex.Message.Contains("A node can't have multiple connections to another same node") &&
+                      ex.ParamName == "value"
+            );
         }
     }
 
