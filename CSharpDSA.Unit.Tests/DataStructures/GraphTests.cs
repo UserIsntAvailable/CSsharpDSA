@@ -147,10 +147,81 @@ namespace CSharpDSA.Unit.Tests.DataStructures
                 return pathLength;
             }
         }
+
+        [Fact]
+        public void Traverse_ShouldThrowArgumentNullException_WhenParametersAreNull()
+        {
+            var dummy = _fixture.Create<Dummy>();
+            Action<Dummy> dummyAction = _ =>
+            {
+            };
+
+            Graph<Dummy> graph = new();
+
+            Action fromAction = () => graph.Traverse(null, dummy, dummyAction);
+            Action toAction = () => graph.Traverse(dummy, null, dummyAction);
+            Action actionAction = () => graph.Traverse(dummy, _fixture.Create<Dummy>(), null);
+
+            fromAction.Should().ThrowExactly<ArgumentNullException>();
+            toAction.Should().ThrowExactly<ArgumentNullException>();
+            actionAction.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void Traverse_ShouldThrowKeyNotFoundException_WhenFromOrToAreNotFound()
+        {
+            var dummy = _fixture.Create<Dummy>();
+
+            Graph<Dummy> graph = new() {dummy,};
+
+            Action fromAction = () => graph.Traverse(
+                _fixture.Create<Dummy>(),
+                dummy,
+                (_) =>
+                {
+                }
+            );
+
+            Action toAction = () => graph.Traverse(
+                dummy,
+                _fixture.Create<Dummy>(),
+                (_) =>
+                {
+                }
+            );
+
+            fromAction.Should().ThrowExactly<KeyNotFoundException>();
+            toAction.Should().ThrowExactly<KeyNotFoundException>();
+        }
+
+        [Fact]
+        public void Traverse_ShouldDoNothing_WhenFromAndToAreNotConnected()
+        {
+            var dummy = _fixture.Create<Dummy>();
+            var fromDummy = _fixture.Create<Dummy>();
+            var toDummy = _fixture.Create<Dummy>();
+
+            Graph<Dummy> graph = new()
+            {
+                fromDummy,
+                toDummy,
+                dummy,
+                {fromDummy, dummy},
+            };
+
+            graph.Traverse(
+                fromDummy,
+                toDummy,
+                (_) => throw new Exception("This action shouldn't run, since from and to aren't connected")
+            );
+        }
     }
 
     public class Dummy : IComparable<Dummy>
     {
-        public int CompareTo(Dummy other) => throw new NotImplementedException();
+        public int CompareTo(Dummy other)
+        {
+            return this.GetHashCode() - other.GetHashCode();
+        }
     }
 }
