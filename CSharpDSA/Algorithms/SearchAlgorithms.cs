@@ -63,9 +63,7 @@ namespace CSharpDSA.Algorithms
             Dictionary<T, T> trace = new() {{start, default(T)!},};
             List<T> trackedNodes = new() {start,};
 
-            var i = 0;
-
-            do
+            for(var i = 0; i <= trackedNodes.Count - 1; i++)
             {
                 var current = trackedNodes[i];
 
@@ -80,10 +78,7 @@ namespace CSharpDSA.Algorithms
 
                     if(edge.CompareTo(end) == 0) goto END_NODE_FOUND;
                 }
-
-                i++;
             }
-            while(i <= trackedNodes.Count - 1);
 
             // If node 'end' wasn't connected to 'start'
             return Array.Empty<T>();
