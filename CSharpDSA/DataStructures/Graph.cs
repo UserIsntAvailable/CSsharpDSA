@@ -77,12 +77,12 @@ namespace CSharpDSA.DataStructures
 
             if(!_items.ContainsKey(from))
             {
-                throw new ArgumentNullException(nameof(from));
+                throw new KeyNotFoundException(nameof(from));
             }
 
             if(!_items.ContainsKey(to))
             {
-                throw new ArgumentNullException(nameof(to));
+                throw new KeyNotFoundException(nameof(to));
             }
 
             if(from.CompareTo(to) == 0 || _items[from].Count == 0)
