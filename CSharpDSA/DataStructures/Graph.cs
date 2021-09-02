@@ -85,7 +85,7 @@ namespace CSharpDSA.DataStructures
                 throw new ArgumentNullException(nameof(to));
             }
 
-            if(from.CompareTo(to) == 0 || _items[from].Count == 0 || _items[to].Count == 0)
+            if(from.CompareTo(to) == 0 || _items[from].Count == 0)
             {
                 return;
             }
