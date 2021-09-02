@@ -37,7 +37,7 @@ namespace CSharpDSA.DataStructures
             if(!_items.ContainsKey(value))
             {
                 throw new KeyNotFoundException(
-                    "You can't add a value to a node when that value is yet added as a node"
+                    "You can't add a value to a node when that value is not yet added as a node"
                 );
             }
 
@@ -45,7 +45,10 @@ namespace CSharpDSA.DataStructures
 
             var index = SearchAlgorithms.Instance.BinarySearch(nodeList, value);
 
-            nodeList.Insert(index, value);
+            if(index < 0)
+            {
+                nodeList.Insert(~index, value);
+            }
         }
 
         public void Traverse(T from, T to, Action<T> action)
