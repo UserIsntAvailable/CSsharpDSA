@@ -8,11 +8,11 @@ namespace CSharpDSA.DataStructures
 {
     public class Graph<T> : IGraph<T> where T : IComparable<T>
     {
-        private readonly Dictionary<T, IList<T>> _items;
+        private readonly IDictionary<T, IList<T>> _items;
 
         public Graph()
         {
-            _items = new Dictionary<T, IList<T>>();
+            _items = new SortedDictionary<T, IList<T>>();
         }
 
         public IList<T> this[T item] => _items[item];
